@@ -1,18 +1,22 @@
 package uh.ac.cr.models;
 
 import uh.ac.cr.managers.TicketManager;
+import uh.ac.cr.managers.UserManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
     //Objects declaration.
     TicketManager ticketManager;
+    UserManager userManager;
     Scanner scanner;
     //Constructor.
-    public Menu() {
+    public Menu(UserManager userManager) {
+        this.userManager = userManager;
         ticketManager = new TicketManager();
         scanner = new Scanner(System.in);
     }
@@ -21,10 +25,11 @@ public class Menu {
         int option = -1;
 
         //Menu
-        while (option != 3) {
+        while (option != 4) {
             System.out.println("1: Crear tiquete.\n" +
                     "2: Ver el estado de mis tiquetes.\n" +
-                    "3: Cerrar sesión.");
+                    "3: Consultar tiquete con detalle.\n" +
+                    "4: Cerrar sesión.");
             option = scanner.nextInt();
             scanner.nextLine();
             switch (option) {
@@ -32,7 +37,7 @@ public class Menu {
                     System.out.println("ID del tiquete.");
                     int ticketID = scanner.nextInt();
                     scanner.nextLine();
-                    //TODO - No more than 50 characters.
+
                     System.out.println("Descripción del problema.");
                     String problemDescription = scanner.nextLine();
 
@@ -52,17 +57,34 @@ public class Menu {
                     System.out.println("\n¡TIQUETE CREADO!\n");
                     break;
                 case 2:
-                    System.out.println("TIQUETES ACTIVOS");
-                    System.out.println(ticketManager.readUserUnfinishedTickets(user));
+                    System.out.println("TIQUETES DE: " + user.getFullName());
                     System.out.println("TIQUETES TERMINADOS");
                     System.out.println(ticketManager.readUserFinishedTickets(user));
-
+                    System.out.println("TIQUETES ACTIVOS");
+                    System.out.println(ticketManager.readUserUnfinishedTickets(user));
                     break;
                 case 3:
+                    System.out.println("TIQUETES DE: " + user.getFullName());
+                    System.out.println("TIQUETES TERMINADOS");
+                    System.out.println(ticketManager.readUserFinishedTickets(user));
+                    System.out.println("TIQUETES ACTIVOS");
+                    System.out.println(ticketManager.readUserUnfinishedTickets(user));
+                    System.out.println("Seleccione el tiquete a consultar con su ID:");
+                    try {
+                        ticketID = scanner.nextInt();
+                        scanner.nextLine();
+
+                        System.out.println(ticketManager.consultTicketForUsers(ticketID, user));
+                    } catch (NullPointerException e) {
+                        System.out.println("\nERROR: El ID introducido no corresponde a uno de la lista.\n");
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nERROR: El ID debe ser un número.\n");
+                    }
+                    break;
+                case 4:
                     break;
             }
         }
-
     }
     //Supervisor's menu.
     public void supervisorMenu(Supervisor supervisor) {
@@ -70,19 +92,63 @@ public class Menu {
         int option = -1;
 
         //Menu
-        while (option != 3) {
-            System.out.println("1: Crear tiquete.\n" +
-                    "2: Ver el estado de mis tiquetes.\n" +
-                    "3: Cerrar sesión.");
+        while (option != 5) {
+            System.out.println("1: Asignar tiquete a soportista.\n" +
+                    "2: Visualizar todos los tiquetes.\n" +
+                    "3: Consultar tiquete con detalle.\n" +
+                    "4: Estadísticas.\n" +
+                    "5: Cerrar sesión.");
             option = scanner.nextInt();
             scanner.nextLine();
             switch (option) {
                 case 1:
+                    System.out.println("Seleccione el soportista con su ID.");
+                    System.out.println(userManager.readSupporters());
+                    //TODO - Verify if the ID exists.
+                    int supporterID = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Supporter supporter = (Supporter) userManager.getUser(supporterID);
+
+                    System.out.println("Seleccione el tiquete con su ID.");
+                    System.out.println(ticketManager.readAvailableTickets());
+                    int ticketID = scanner.nextInt();
+                    scanner.nextLine();
+
+                    ticketManager.assignTicket(ticketID, supporter);
+                    System.out.println("\n¡TIQUETE ASIGNADO!\n");
                     break;
                 case 2:
-
+                    System.out.println("TIQUETES PENDIENTES");
+                    System.out.println(ticketManager.readHangingTickets());
+                    System.out.println("TIQUETES TERMINADOS");
+                    System.out.println(ticketManager.readFinishedTickets());
+                    System.out.println("TIQUETES DISPONIBLES");
+                    System.out.println(ticketManager.readAvailableTickets());
                     break;
                 case 3:
+                    System.out.println("TIQUETES PENDIENTES");
+                    System.out.println(ticketManager.readHangingTickets());
+                    System.out.println("TIQUETES TERMINADOS");
+                    System.out.println(ticketManager.readFinishedTickets());
+                    System.out.println("TIQUETES DISPONIBLES");
+                    System.out.println(ticketManager.readAvailableTickets());
+                    System.out.println("Seleccione el tiquete a consultar con su ID:");
+                    try {
+                        ticketID = scanner.nextInt();
+                        scanner.nextLine();
+
+                        System.out.println(ticketManager.consultTicket(ticketID));
+                    } catch (NullPointerException e) {
+                        System.out.println("\nERROR: El ID introducido no corresponde a uno de la lista.\n");
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nERROR: El ID debe ser un número.\n");
+                    }
+
+                    break;
+                case 4:
+                    break;
+                case 5:
                     break;
             }
         }
@@ -93,11 +159,13 @@ public class Menu {
         int option = -1;
 
         //Menu
-        while (option != 4) {
+        while (option != 6) {
             System.out.println("1: Autoasignarse un tiquete.\n" +
                     "2: Comentar tiquete.\n" +
                     "3: Terminar un tiquete.\n" +
-                    "4: Cerrar sesión.");
+                    "4: Visualizar los tiquetes.\n" +
+                    "5: Consultar tiquete con detalle.\n" +
+                    "6: Cerrar sesión.");
             option = scanner.nextInt();
             scanner.nextLine();
             switch (option) {
@@ -105,35 +173,82 @@ public class Menu {
                     //The ID of the ticket is asked.
                     System.out.println("Seleccione el tiquete con su ID.");
                     System.out.println(ticketManager.readAvailableTickets());
-                    int ticketID = scanner.nextInt();
-                    scanner.nextLine();
-                    //The ticket is assigned to the supporter.
+                    int ticketID;
                     try {
+                        ticketID = scanner.nextInt();
+                        scanner.nextLine();
                         takeTicket(ticketID, supporter);
                         System.out.println("\n¡TIQUETE TOMADO!\n");
 
                     } catch (NullPointerException e) {
                         System.out.println("\nERROR: El ID introducido no existe.\n");
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nERROR: El ID debe ser un número.\n");
                     }
                     break;
                 case 2:
                     //TODO ----------------
                     System.out.println("Seleccione el tiquete con su ID.");
-                    System.out.println();
-                    ticketID = scanner.nextInt();
-                    scanner.nextLine();
+                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+                    try {
+                        ticketID = scanner.nextInt();
+                        scanner.nextLine();
 
+                        System.out.println(ticketManager.consultTicketForSupporters(ticketID, supporter));
+                        System.out.println("Inserte el comentario para retroalimentación:");
+                        String comment = scanner.nextLine();
+
+                        ticketManager.addComment(ticketID, comment);
+                        System.out.println("\n¡COMENTARIO AÑADIDO!\n");
+                    } catch (NullPointerException e) {
+                        System.out.println("\nERROR: El ID introducido no existe.\n");
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nERROR: El ID debe ser un número.\n");
+                    }
 
                     break;
                 case 3:
                     System.out.println("Seleccione el tiquete con su ID.");
                     System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
-                    ticketID = scanner.nextInt();
-                    scanner.nextLine();
-
-                    ticketManager.finishTicket(ticketID);
+                    try {
+                        ticketID = scanner.nextInt();
+                        scanner.nextLine();
+                        ticketManager.finishTicket(ticketID);
+                        System.out.println("\n¡TIQUETE TERMINADO!\n");
+                    } catch (NullPointerException e) {
+                        System.out.println("\nERROR: El ID introducido no existe.\n");
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nERROR: El ID debe ser un número.\n");
+                    }
                     break;
                 case 4:
+                    System.out.println("TIQUETES PENDIENTES");
+                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+                    System.out.println("TIQUETES TERMINADOS");
+                    System.out.println(ticketManager.readSupporterFinishedTickets(supporter));
+                    System.out.println("TIQUETES DISPONIBLES");
+                    System.out.println(ticketManager.readAvailableTickets());
+                    break;
+                case 5:
+                    System.out.println("TIQUETES PENDIENTES");
+                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+                    System.out.println("TIQUETES TERMINADOS");
+                    System.out.println(ticketManager.readSupporterFinishedTickets(supporter));
+                    System.out.println("TIQUETES DISPONIBLES");
+                    System.out.println(ticketManager.readAvailableTickets());
+                    System.out.println("Seleccione el tiquete a consultar con su ID:");
+                    try {
+                        ticketID = scanner.nextInt();
+                        scanner.nextLine();
+
+                        System.out.println(ticketManager.consultTicketForSupporters(ticketID, supporter));
+                    } catch (NullPointerException e) {
+                        System.out.println("\nERROR: El ID introducido no corresponde a uno de la lista.\n");
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nERROR: El ID debe ser un número.\n");
+                    }
+                    break;
+                case 6:
                     break;
             }
         }

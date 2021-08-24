@@ -76,13 +76,26 @@ public class TicketList {
         }
     }
 
+    public String readHangingTickets() {
+        TicketNode index = head;
+        String hangingTickets = "";
+
+        while (index != null) {
+            if (!index.ticket.isFinished() && !index.ticket.isAvailable()) {
+                hangingTickets = hangingTickets + index.ticket.getTicketInfo() + "\n";
+            }
+            index = index.next;
+        }
+        return hangingTickets;
+    }
+
     public String readFinishedTickets() {
         TicketNode index = head;
         String finishedTickets = "";
 
         while (index != null) {
             if (index.ticket.isFinished()) {
-                finishedTickets = finishedTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername();
+                finishedTickets = finishedTickets + index.ticket.getTicketInfo() + "\n";
             }
             index = index.next;
         }
@@ -95,7 +108,7 @@ public class TicketList {
 
         while (index != null) {
             if (index.ticket.isAvailable()) {
-                availableTickets = availableTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+                availableTickets = availableTickets + index.ticket.getTicketInfo() + "\n";
             }
             index = index.next;
         }
@@ -109,7 +122,7 @@ public class TicketList {
         while (index != null) {
             if (index.ticket.isFromUser(user) && !index.ticket.isFinished()) {
                 //TODO - Replace it for the method getTicketInfo().
-                activeTickets = activeTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+                activeTickets = activeTickets + index.ticket.getTicketInfoForUser() + "\n";
             }
             index = index.next;
         }
@@ -123,7 +136,7 @@ public class TicketList {
         while (index != null) {
             if (index.ticket.isFromUser(user) && index.ticket.isFinished()) {
                 //TODO - Replace it for the method getTicketInfo().
-                finishedTickets = finishedTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+                finishedTickets = finishedTickets + index.ticket.getTicketInfoForUser() + "\n";
             }
             index = index.next;
         }
@@ -137,11 +150,24 @@ public class TicketList {
         while (index != null) {
             if (index.ticket.wasTakenBy(supporter) && !index.ticket.isFinished()) {
                 //TODO - Replace it for the method getTicketInfo().
-                activeTickets = activeTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+                activeTickets = activeTickets + index.ticket.getTicketInfoForSupporter() + "\n";
             }
             index = index.next;
         }
         return activeTickets;
+    }
+    public String readSupporterFinishedTickets(Supporter supporter) {
+        TicketNode index = head;
+        String finishedTickets = "";
+
+        while (index != null) {
+            if (index.ticket.wasTakenBy(supporter) && index.ticket.isFinished()) {
+                //TODO - Replace it for the method getTicketInfo().
+                finishedTickets = finishedTickets + index.ticket.getTicketInfoForSupporter() + "\n";
+            }
+            index = index.next;
+        }
+        return finishedTickets;
     }
 
 

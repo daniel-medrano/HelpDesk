@@ -18,13 +18,15 @@ public class TicketManager {
     public void createTicket(int ticketID, User requesterOfTicket, String problemDescription, Date date, Date deadlineExpected) {
         ticketList.insertTicketToTail(new Ticket(ticketID, requesterOfTicket, problemDescription, date, deadlineExpected));
     }
+    public String readHangingTickets() {
+        return ticketList.readHangingTickets();
+    }
     public String readFinishedTickets() {
         return ticketList.readFinishedTickets();
     }
     public String readAvailableTickets() {
         return ticketList.readAvailableTickets();
     }
-
     public String readUserUnfinishedTickets(User user) {
         return ticketList.readUserUnfinishedTickets(user);
     }
@@ -34,13 +36,40 @@ public class TicketManager {
     public String readSupporterUnfinishedTickets(Supporter supporter) {
         return ticketList.readSupporterUnfinishedTickets(supporter);
     }
+    public String readSupporterFinishedTickets(Supporter supporter) {
+        return ticketList.readSupporterFinishedTickets(supporter);
+    }
     public void deleteTicket(int ticketID) {
         ticketList.removeTicket(ticketList.getTicketByID(ticketID));
+    }
+    public String consultTicket(int ticketID) throws NullPointerException {
+        Ticket ticket = ticketList.getTicketByID(ticketID);
+        return ticket.getTicketDetailedInfo();
+    }
+    public String consultTicketForUsers(int ticketID, User user) throws NullPointerException {
+        Ticket ticket = ticketList.getTicketByID(ticketID);
+        if (ticket.isFromUser(user)) {
+            return ticket.getTicketDetailedInfo();
+        } else {
+            return null;
+        }
+    }
+    public String consultTicketForSupporters(int ticketID, Supporter supporter) throws NullPointerException {
+        Ticket ticket = ticketList.getTicketByID(ticketID);
+        if (ticket.wasTakenBy(supporter) || ticket.isAvailable()) {
+            return ticket.getTicketDetailedInfo();
+        } else {
+            return null;
+        }
+    }
+
+    public void addComment(int ticketID, String comment) throws NullPointerException {
+        ticketList.getTicketByID(ticketID).insertComment(comment);
     }
     public void assignTicket(int ticketID, Supporter supporter) throws NullPointerException {
         ticketList.getTicketByID(ticketID).assignTicketToSupporter(supporter);
     }
-    public void finishTicket(int ticketID) {
+    public void finishTicket(int ticketID) throws NullPointerException {
         ticketList.getTicketByID(ticketID).finishTicket();
     }
 

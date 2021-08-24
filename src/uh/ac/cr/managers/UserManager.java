@@ -13,17 +13,21 @@ public class UserManager {
         this.userList = new UserList();
     }
 
-    public void createUser(int userID, String username, String password) {
-        userList.insertUserToTail(new User(userID, username, password));
+    public void createUser(int ID, String firstName, String secondName, String department, String username, String password) {
+        userList.insertUserToTail(new User(ID, firstName, secondName, department, username, password));
     }
 
-    public void createSupervisor(int supervisorID, String username, String password) {
-        userList.insertUserToTail(new Supervisor(supervisorID, username, password));
+    public void createSupervisor(int ID, String firstName, String secondName, String department, String username, String password) {
+        userList.insertUserToTail(new Supervisor(ID, firstName, secondName, department, username, password));
 
     }
 
-    public void createSupporter(int supporterID, String username, String password) {
-        userList.insertUserToTail(new Supporter(supporterID, username, password));
+    public void createSupporter(int ID, String firstName, String secondName, String department, String username, String password) {
+        userList.insertUserToTail(new Supporter(ID, firstName, secondName, department, username, password));
+    }
+
+    public String readSupporters() {
+        return userList.readSupporters();
     }
 
     public User getUser(int userID) {

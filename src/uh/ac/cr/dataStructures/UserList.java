@@ -1,5 +1,6 @@
 package uh.ac.cr.dataStructures;
 
+import uh.ac.cr.models.Supporter;
 import uh.ac.cr.models.Ticket;
 import uh.ac.cr.models.User;
 
@@ -47,6 +48,20 @@ public class UserList {
             return nodeIndex.user;
         }
         return null;
+    }
+
+    public String readSupporters() {
+        UserNode index = head;
+        String supportersList = "";
+
+        while (index != null) {
+            if (index.user instanceof Supporter) {
+                //TODO - Replace it for the method getTicketInfo().
+                supportersList = supportersList + index.user.getUserInfo() + "\n";
+            }
+            index = index.next;
+        }
+        return supportersList;
     }
 
     //Finds a user with its ID and returns it.

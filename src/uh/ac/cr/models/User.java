@@ -17,12 +17,25 @@ public class User {
 
     public User() {}
 
+    public User(int id, String firstName, String secondName, String department, String username, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.department = department;
+        this.username = username;
+        this.password = password;
+    }
+
     public User(int id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
     }
     //TODO - Change and create a menu class.
+
+    public String getUserInfo() {
+        return id + " - " + username + ". " + getFullName() + ".";
+    }
 
 
     public int getId() {
@@ -31,6 +44,10 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getFullName() {
+        return firstName + " " + secondName;
     }
 
     public String getFirstName() {

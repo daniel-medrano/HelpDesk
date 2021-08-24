@@ -15,7 +15,7 @@ public class Main {
 	// write your code here
 
         UserManager userManager = new UserManager();
-        Menu menu = new Menu();
+        Menu menu = new Menu(userManager);
 
         Scanner scanner = new Scanner(System.in);
         int option = -1;
@@ -39,10 +39,9 @@ public class Main {
                     User user = userManager.validateUser(username, password);
 
                     if (user != null) {
-                        //TODO - Implement getMenu().
-                        if (user instanceof Supporter)
+                        if (user instanceof Supporter) {
                             menu.supporterMenu((Supporter) user);
-                        else if (user instanceof Supervisor) {
+                        } else if (user instanceof Supervisor) {
                             menu.supervisorMenu((Supervisor) user);
                         } else {
                             menu.userMenu(user);
@@ -58,6 +57,15 @@ public class Main {
                     System.out.println("ID del usuario:");
                     int newUserID = scanner.nextInt();
                     scanner.nextLine();
+
+                    System.out.println("Nombre:");
+                    String newFirstName = scanner.nextLine();
+
+                    System.out.println("Apellido:");
+                    String newSecondName = scanner.nextLine();
+
+                    System.out.println("Departamento:");
+                    String newDepartment = scanner.nextLine();
                     //TODO - Add if the username exits already.
                     System.out.println("Nombre de usuario:");
                     String newUsername = scanner.nextLine();
@@ -71,15 +79,14 @@ public class Main {
                     scanner.nextLine();
 
                     if (role == 1) {
-                        userManager.createUser(newUserID, newUsername, newPassword);
+                        userManager.createUser(newUserID,newFirstName, newSecondName, newDepartment, newUsername, newPassword);
                     } else if (role == 2) {
-                        userManager.createSupporter(newUserID, newUsername, newPassword);
+                        userManager.createSupporter(newUserID,newFirstName, newSecondName, newDepartment, newUsername, newPassword);
                     } else if (role == 3) {
-                        userManager.createSupervisor(newUserID, newUsername, newPassword);
+                        userManager.createSupervisor(newUserID,newFirstName, newSecondName, newDepartment, newUsername, newPassword);
                     } else {
                         System.out.println("ERROR");
                     }
-
                     break;
                 case 3:
                     break;
