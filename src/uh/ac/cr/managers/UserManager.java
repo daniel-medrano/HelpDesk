@@ -1,5 +1,6 @@
 package uh.ac.cr.managers;
 
+import uh.ac.cr.dataStructures.TicketList;
 import uh.ac.cr.dataStructures.UserList;
 import uh.ac.cr.models.Supervisor;
 import uh.ac.cr.models.Supporter;
@@ -52,6 +53,10 @@ public class UserManager {
 
     public boolean existsUser(int id) {
         return getUser(id) != null;
+    }
+
+    public UserList getUserList() {
+        return userList;
     }
 
 }

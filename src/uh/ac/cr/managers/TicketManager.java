@@ -82,4 +82,8 @@ public class TicketManager {
     public Ticket getTicket(int ticketID) {
         return ticketList.getTicketByID(ticketID);
     }
+
+    public TicketList getTicketList() {
+        return ticketList;
+    }
 }

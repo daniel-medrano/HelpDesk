@@ -1,5 +1,6 @@
 package uh.ac.cr;
 
+import uh.ac.cr.managers.TicketManager;
 import uh.ac.cr.managers.UserManager;
 import uh.ac.cr.models.Menu;
 import uh.ac.cr.models.Supervisor;
@@ -13,12 +14,16 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
 
+
         UserManager userManager = new UserManager();
+        TicketManager ticketManager = new TicketManager();
+
+
         userManager.createUser(1,"Daniel", "Medrano", "IT", "Daniel123", "1234");
         userManager.createSupporter(2,"Jose", "Medrano", "IT", "Gordo", "1234");
         userManager.createSupervisor(3,"Erick", "Lopez", "IT", "Profe", "1234");
 
-        Menu menu = new Menu(userManager);
+        Menu menu = new Menu(userManager, ticketManager);
 
         Scanner scanner = new Scanner(System.in);
         int option = -1;

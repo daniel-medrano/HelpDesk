@@ -6,7 +6,6 @@ import uh.ac.cr.managers.UserManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
@@ -20,9 +19,9 @@ public class Menu {
     int supporterID;
     Scanner scanner;
     //Constructor.
-    public Menu(UserManager userManager) {
+    public Menu(UserManager userManager, TicketManager ticketManager) {
         this.userManager = userManager;
-        ticketManager = new TicketManager();
+        this.ticketManager = ticketManager;
         scanner = new Scanner(System.in);
     }
     //User's menu.
