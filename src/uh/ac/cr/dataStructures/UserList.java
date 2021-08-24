@@ -100,7 +100,7 @@ public class UserList {
         UserNode nodeIndex = head;
         boolean found = false;
 
-        while (nodeIndex != null && !found) {
+        while (nodeIndex != null) {
             //If the userID inserted matches the ID of one of the users in the nodes, then found is true.
             found = nodeIndex.user.getUsername().equals(username) && nodeIndex.user.getPassword().equals(password);
 
@@ -116,15 +116,6 @@ public class UserList {
     private boolean isUserListEmpty() {
         return size == 0 || head == null;
     }
-
-
-
-
-
-
-
-
-
 
     //The class of the node.
     static class UserNode {

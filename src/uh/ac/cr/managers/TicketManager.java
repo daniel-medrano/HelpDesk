@@ -78,4 +78,8 @@ public class TicketManager {
     public boolean existsID(int ticketID) {
         return ticketList.getTicketByID(ticketID) != null;
     }
+
+    public Ticket getTicket(int ticketID) {
+        return ticketList.getTicketByID(ticketID);
+    }
 }

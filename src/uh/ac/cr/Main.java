@@ -6,7 +6,6 @@ import uh.ac.cr.models.Supervisor;
 import uh.ac.cr.models.Supporter;
 import uh.ac.cr.models.User;
 
-import java.text.ParseException;
 import java.util.Scanner;
 
 public class Main {
@@ -15,6 +14,10 @@ public class Main {
 	// write your code here
 
         UserManager userManager = new UserManager();
+        userManager.createUser(1,"Daniel", "Medrano", "IT", "Daniel123", "1234");
+        userManager.createSupporter(2,"Jose", "Medrano", "IT", "Gordo", "1234");
+        userManager.createSupervisor(3,"Erick", "Lopez", "IT", "Profe", "1234");
+
         Menu menu = new Menu(userManager);
 
         Scanner scanner = new Scanner(System.in);
@@ -30,11 +33,21 @@ public class Main {
             switch (option) {
                 case 1:
                     //1: Login.
-                    System.out.println("Nombre de usuario: ");
+                    System.out.println("Inserte su nombre de usuario. Inserte \"Cancelar\" si no desea continuar. ");
                     String username = scanner.nextLine();
+                    if (username.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
 
-                    System.out.println("Contraseña: ");
+                    System.out.println("Inserte la contraseña. Inserte \"Cancelar\" si no desea continuar.");
                     String password = scanner.nextLine();
+                    if (password.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
 
                     User user = userManager.validateUser(username, password);
 
@@ -53,25 +66,76 @@ public class Main {
                     break;
                 case 2:
                     //2: Register.
-                    //TODO - Add if the user ID exits already.
-                    System.out.println("ID del usuario:");
-                    int newUserID = scanner.nextInt();
-                    scanner.nextLine();
+                    boolean ready = false;
+                    boolean cancel = false;
+                    int newUserID = 0;
+                    String input;
+                    do {
+                        try {
+                            System.out.println("Inserte el ID del usuario. Inserte \"Cancelar\" si no desea continuar.");
+                            input = scanner.next();
+                            scanner.nextLine();
 
-                    System.out.println("Nombre:");
+                            if (input.equals("Cancelar")) {
+                                System.out.println("\nLa operación ha sido cancelada.\n");
+                                //Exits the operation.
+                                cancel = true;
+                                break;
+                            } else {
+                                newUserID = Integer.parseInt(input);
+                                if (!userManager.existsUser(newUserID)) {
+                                    ready = true;
+                                } else {
+                                    System.out.println("\nERROR: Ya existe un usuario con este ID.\n");
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("\nERROR: El ID debe ser un número.\n");
+                        }
+                    } while (!ready);
+                    if (cancel) {
+                        break;
+                    }
+
+                    System.out.println("Inserte su nombre. Inserte \"Cancelar\" si no desea continuar.");
                     String newFirstName = scanner.nextLine();
+                    if (newFirstName.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
 
-                    System.out.println("Apellido:");
+                    System.out.println("Inserte su apellido. Inserte \"Cancelar\" si no desea continuar.");
                     String newSecondName = scanner.nextLine();
+                    if (newSecondName.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
 
-                    System.out.println("Departamento:");
+                    System.out.println("Inserte el departamento al que pertenece. Inserte \"Cancelar\" si no desea continuar.");
                     String newDepartment = scanner.nextLine();
-                    //TODO - Add if the username exits already.
-                    System.out.println("Nombre de usuario:");
-                    String newUsername = scanner.nextLine();
+                    if (newDepartment.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
 
-                    System.out.println("Contraseña: ");
+                    System.out.println("Inserte su nombre de usuario. Inserte \"Cancelar\" si no desea continuar.");
+                    String newUsername = scanner.nextLine();
+                    if (newUsername.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
+
+                    System.out.println("Inserte la contraseña. Inserte \"Cancelar\" si no desea continuar. ");
                     String newPassword = scanner.nextLine();
+                    if (newPassword.equals("Cancelar")) {
+                        System.out.println("\nLa operación ha sido cancelada.\n");
+                        //Exits the operation.
+                        break;
+                    }
 
                     //---------------------------------------------------------------------------------------------
                     System.out.println("1 para usuario, 2 para soportista, 3 para supervisor.");

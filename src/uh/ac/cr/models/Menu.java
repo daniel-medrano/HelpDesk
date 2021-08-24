@@ -13,6 +13,11 @@ public class Menu {
     //Objects declaration.
     TicketManager ticketManager;
     UserManager userManager;
+
+    boolean ready;
+    String input;
+    int ticketID;
+    int supporterID;
     Scanner scanner;
     //Constructor.
     public Menu(UserManager userManager) {
@@ -34,42 +39,13 @@ public class Menu {
             scanner.nextLine();
             switch (option) {
                 case 1:
-                    System.out.println("ID del tiquete.");
-                    int ticketID = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.println("Descripción del problema.");
-                    String problemDescription = scanner.nextLine();
-
-                    Date date = new Date();
-
-                    createTicket(ticketID, problemDescription, date, user);
-                    System.out.println("\n¡TIQUETE CREADO!\n");
+                    createTicket(user);
                     break;
                 case 2:
-                    System.out.println("TIQUETES DE: " + user.getFullName());
-                    System.out.println("TIQUETES TERMINADOS");
-                    System.out.println(ticketManager.readUserFinishedTickets(user));
-                    System.out.println("TIQUETES ACTIVOS");
-                    System.out.println(ticketManager.readUserUnfinishedTickets(user));
+                    visualizeTicketsOfUser(user);
                     break;
                 case 3:
-                    System.out.println("TIQUETES DE: " + user.getFullName());
-                    System.out.println("TIQUETES TERMINADOS");
-                    System.out.println(ticketManager.readUserFinishedTickets(user));
-                    System.out.println("TIQUETES ACTIVOS");
-                    System.out.println(ticketManager.readUserUnfinishedTickets(user));
-                    System.out.println("Seleccione el tiquete a consultar con su ID:");
-                    try {
-                        ticketID = scanner.nextInt();
-                        scanner.nextLine();
-
-                        System.out.println(ticketManager.consultTicketForUsers(ticketID, user));
-                    } catch (NullPointerException e) {
-                        System.out.println("\nERROR: El ID introducido no corresponde a uno de la lista.\n");
-                    } catch (InputMismatchException e) {
-                        System.out.println("\nERROR: El ID debe ser un número.\n");
-                    }
+                    consultTicketWithDetail(user);
                     break;
                 case 4:
                     break;
@@ -92,63 +68,16 @@ public class Menu {
             scanner.nextLine();
             switch (option) {
                 case 1:
-                    System.out.println("Seleccione el soportista con su ID.");
-                    System.out.println(userManager.readSupporters());
-                    //TODO - Verify if the ID exists.
-                    int supporterID = scanner.nextInt();
-                    scanner.nextLine();
-
-                    Supporter supporter = userManager.getSupporter(supporterID);
-
-                    System.out.println("Seleccione el tiquete con su ID.");
-                    System.out.println(ticketManager.readAvailableTickets());
-                    int ticketID = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.println("Fecha limite para resolver el tiquete. En el formato dd/mm/yyyy.");
-                    String dateFormat = scanner.next();
-                    scanner.nextLine();
-                    Date deadlineExpected = null;
-                    try {
-                        deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(dateFormat);
-                    } catch (ParseException e) {
-                        System.out.println("ERROR: Formato incorrecto.");
-                    }
-
-                    ticketManager.assignTicket(ticketID, supporter, deadlineExpected);
-                    System.out.println("\n¡TIQUETE ASIGNADO!\n");
+                    assignTicketToSupporter();
                     break;
                 case 2:
-                    System.out.println("TIQUETES PENDIENTES");
-                    System.out.println(ticketManager.readHangingTickets());
-                    System.out.println("TIQUETES TERMINADOS");
-                    System.out.println(ticketManager.readFinishedTickets());
-                    System.out.println("TIQUETES DISPONIBLES");
-                    System.out.println(ticketManager.readAvailableTickets());
+                    visualizeTicketsOfSupervisor();
                     break;
                 case 3:
-                    System.out.println("TIQUETES PENDIENTES");
-                    System.out.println(ticketManager.readHangingTickets());
-                    System.out.println("TIQUETES TERMINADOS");
-                    System.out.println(ticketManager.readFinishedTickets());
-                    System.out.println("TIQUETES DISPONIBLES");
-                    System.out.println(ticketManager.readAvailableTickets());
-                    System.out.println("Seleccione el tiquete a consultar con su ID:");
-                    try {
-                        ticketID = scanner.nextInt();
-                        scanner.nextLine();
-
-                        System.out.println(ticketManager.consultTicket(ticketID));
-                    } catch (NullPointerException e) {
-                        System.out.println("\nERROR: El ID introducido no corresponde a uno de la lista.\n");
-                    } catch (InputMismatchException e) {
-                        System.out.println("\nERROR: El ID debe ser un número.\n");
-                    }
-
+                    consultTicketWithDetailSupervisor();
                     break;
                 case 4:
-                    System.out.println("ESTADÍSTICAS DE SOPORTISTAS");
-                    System.out.println(userManager.readSupportersWithStatistics());
+                    printSupporterStatistics();
                     break;
                 case 5:
                     break;
@@ -172,92 +101,19 @@ public class Menu {
             scanner.nextLine();
             switch (option) {
                 case 1:
-                    //The ID of the ticket is asked.
-                    System.out.println("Seleccione el tiquete con su ID.");
-                    System.out.println(ticketManager.readAvailableTickets());
-                    int ticketID;
-                    ticketID = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.println("Fecha limite para resolver el tiquete. En el formato dd/mm/yyyy.");
-                    String dateFormat = scanner.next();
-                    scanner.nextLine();
-                    Date deadlineExpected = null;
-                    try {
-                        deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(dateFormat);
-                    } catch (ParseException e) {
-                        System.out.println("ERROR: Formato incorrecto.");
-                    }
-                    try {
-                        takeTicket(ticketID, supporter, deadlineExpected);
-                        System.out.println("\n¡TIQUETE TOMADO!\n");
-
-                    } catch (NullPointerException e) {
-                        System.out.println("\nERROR: El ID introducido no existe.\n");
-                    } catch (InputMismatchException e) {
-                        System.out.println("\nERROR: El ID debe ser un número.\n");
-                    }
+                    autoassignTicket(supporter);
                     break;
                 case 2:
-                    System.out.println("Seleccione el tiquete con su ID.");
-                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
-                    try {
-                        ticketID = scanner.nextInt();
-                        scanner.nextLine();
-
-                        System.out.println(ticketManager.consultTicketForSupporters(ticketID, supporter));
-                        System.out.println("Inserte el comentario para retroalimentación:");
-                        String comment = scanner.nextLine();
-
-                        ticketManager.addComment(ticketID, comment);
-                        System.out.println("\n¡COMENTARIO AÑADIDO!\n");
-                    } catch (NullPointerException e) {
-                        System.out.println("\nERROR: El ID introducido no existe.\n");
-                    } catch (InputMismatchException e) {
-                        System.out.println("\nERROR: El ID debe ser un número.\n");
-                    }
-
+                    commentTicket(supporter);
                     break;
                 case 3:
-                    System.out.println("Seleccione el tiquete con su ID.");
-                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
-                    try {
-                        ticketID = scanner.nextInt();
-                        scanner.nextLine();
-                        ticketManager.finishTicket(ticketID);
-                        System.out.println("\n¡TIQUETE TERMINADO!\n");
-                    } catch (NullPointerException e) {
-                        System.out.println("\nERROR: El ID introducido no existe.\n");
-                    } catch (InputMismatchException e) {
-                        System.out.println("\nERROR: El ID debe ser un número.\n");
-                    }
+                    finishTicket(supporter);
                     break;
                 case 4:
-                    System.out.println("TIQUETES PENDIENTES");
-                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
-                    System.out.println("TIQUETES TERMINADOS");
-                    System.out.println(ticketManager.readSupporterFinishedTickets(supporter));
-                    System.out.println("TIQUETES DISPONIBLES");
-                    System.out.println(ticketManager.readAvailableTickets());
+                    visualizeTicketsOfSupporter(supporter);
                     break;
                 case 5:
-                    System.out.println("TIQUETES PENDIENTES");
-                    System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
-                    System.out.println("TIQUETES TERMINADOS");
-                    System.out.println(ticketManager.readSupporterFinishedTickets(supporter));
-                    System.out.println("TIQUETES DISPONIBLES");
-                    System.out.println(ticketManager.readAvailableTickets());
-                    System.out.println("Seleccione el tiquete a consultar con su ID:");
-                    try {
-                        ticketID = scanner.nextInt();
-                        scanner.nextLine();
-
-                        System.out.println(ticketManager.consultTicketForSupporters(ticketID, supporter));
-                    } catch (NullPointerException e) {
-                        System.out.println("\nERROR: El ID introducido no corresponde a uno de la lista.\n");
-                    } catch (InputMismatchException e) {
-                        System.out.println("\nERROR: El ID debe ser un número.\n");
-                    }
+                    consultTicketsWithDetailSupporter(supporter);
                     break;
                 case 6:
                     break;
@@ -269,8 +125,399 @@ public class Menu {
 
     }
 
-    public void createTicket(int ticketID, String problemDescription, Date date, User requesterOfTicket) {
-        ticketManager.createTicket(ticketID, requesterOfTicket, problemDescription, date);
+    //USER MENU
+    public void createTicket(User user) {
+        ready = false;
+        do {
+            try {
+                System.out.println("Inserte el ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (!ticketManager.existsID(ticketID)) {
+                        ready = true;
+                    } else {
+                        System.out.println("\nERROR: Ya existe un tiquete con este ID.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+
+        System.out.println("Descripción del problema. Inserte \"Cancelar\" si no desea continuar.");
+        String problemDescription = scanner.nextLine();
+        if (problemDescription.equals("Cancelar")) {
+            System.out.println("\nLa operación ha sido cancelada.\n");
+            //Exits the operation.
+            return;
+        }
+
+        Date date = new Date();
+
+        ticketManager.createTicket(ticketID, user, problemDescription, date);
+        System.out.println("\n¡TIQUETE CREADO!\n");
+    }
+
+    public void visualizeTicketsOfUser(User user) {
+        System.out.println("TIQUETES DE: " + user.getFullName());
+        System.out.println("TIQUETES TERMINADOS");
+        System.out.println(ticketManager.readUserFinishedTickets(user));
+        System.out.println("TIQUETES ACTIVOS");
+        System.out.println(ticketManager.readUserUnfinishedTickets(user));
+    }
+
+    public void consultTicketWithDetail(User user) {
+        System.out.println("TIQUETES DE: " + user.getFullName());
+        System.out.println("TIQUETES TERMINADOS");
+        System.out.println(ticketManager.readUserFinishedTickets(user));
+        System.out.println("TIQUETES ACTIVOS");
+        System.out.println(ticketManager.readUserUnfinishedTickets(user));
+
+        ready = false;
+        do {
+            try {
+                System.out.println("Inserte el ID del tiquete a consultar. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (ticketManager.existsID(ticketID) && ticketManager.getTicket(ticketID).isFromUser(user)) {
+                        System.out.println(ticketManager.consultTicketForUsers(ticketID, user));
+                        ready = true;
+                    } else {
+                        if (ticketManager.existsID(ticketID))
+                            System.out.println("\nERROR: No existe un tiquete con tal ID.\n");
+                        else
+                            System.out.println("\nERROR: Este tiquete no sale en la lista.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+    }
+
+
+    //SUPERVISOR MENU
+    public void assignTicketToSupporter() {
+        System.out.println("Soportistas con sus IDs.");
+        System.out.println(userManager.readSupporters());
+
+        Supporter supporter = null;
+        ready = false;
+        do {
+            try {
+                System.out.println("Inserte el ID del soportista. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    supporterID = Integer.parseInt(input);
+                    if (userManager.existsUser(supporterID)) {
+                        supporter = userManager.getSupporter(supporterID);
+                        ready = true;
+                    } else {
+                        System.out.println("\nERROR: No existe un soportista con tal ID.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+
+        System.out.println("Tiquetes con sus IDs.");
+        System.out.println(ticketManager.readAvailableTickets());
+
+        ready = false;
+        do {
+            try {
+                System.out.println("ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (ticketManager.existsID(ticketID) && ticketManager.getTicket(ticketID).isAvailable()) {
+                        ready = true;
+                    } else {
+                        if (!ticketManager.existsID(ticketID))
+                            System.out.println("\nERROR: No existe un tiquete con tal ID.\n");
+                        else
+                            System.out.println("\nERROR: El ID introducido no se encuentra en la lista.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+
+        Date deadlineExpected = null;
+        ready = false;
+        do {
+            System.out.println("Inserte la fecha limite para resolver el tiquete con este formato: dd/mm/yyyy. Inserte \"Cancelar\" si no desea continuar.");
+            input = scanner.next();
+            scanner.nextLine();
+            if (input.equals("Cancelar")) {
+                System.out.println("\nLa operación ha sido cancelada.\n");
+                //Exist the operation.
+                return;
+            }
+            try {
+                deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(input);
+                ready = true;
+            } catch (ParseException e) {
+                System.out.println("\nERROR: Formato incorrecto.\n"); }
+        } while (!ready);
+
+        ticketManager.assignTicket(ticketID, supporter, deadlineExpected);
+        System.out.println("\n¡TIQUETE ASIGNADO!\n");
+    }
+
+    public void visualizeTicketsOfSupervisor() {
+        System.out.println("TIQUETES PENDIENTES");
+        System.out.println(ticketManager.readHangingTickets());
+        System.out.println("TIQUETES TERMINADOS");
+        System.out.println(ticketManager.readFinishedTickets());
+        System.out.println("TIQUETES DISPONIBLES");
+        System.out.println(ticketManager.readAvailableTickets());
+    }
+
+    public void consultTicketWithDetailSupervisor() {
+        System.out.println("TIQUETES PENDIENTES");
+        System.out.println(ticketManager.readHangingTickets());
+        System.out.println("TIQUETES TERMINADOS");
+        System.out.println(ticketManager.readFinishedTickets());
+        System.out.println("TIQUETES DISPONIBLES");
+        System.out.println(ticketManager.readAvailableTickets());
+        System.out.println("Seleccione el tiquete a consultar con su ID:");
+
+        ready = false;
+        do {
+            try {
+                System.out.println("ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (ticketManager.existsID(ticketID)) {
+                        System.out.println(ticketManager.consultTicket(ticketID));
+                        ready = true;
+                    } else {
+                        System.out.println("\nERROR: No existe un tiquete con tal ID.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+    }
+
+    public void printSupporterStatistics() {
+        System.out.println("ESTADÍSTICAS DE SOPORTISTAS");
+        System.out.println(userManager.readSupportersWithStatistics());
+    }
+
+    //SUPPORTER MENU
+    public void autoassignTicket(Supporter supporter) {
+        //The ID of the ticket is asked.
+        System.out.println("Tiquetes con sus IDs.");
+        System.out.println(ticketManager.readAvailableTickets());
+        ready = false;
+        do {
+            try {
+                System.out.println("ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (ticketManager.existsID(ticketID) && ticketManager.getTicket(ticketID).isAvailable()) {
+                        ready = true;
+                    } else {
+                        if (!ticketManager.existsID(ticketID))
+                            System.out.println("\nERROR: No existe un tiquete con tal ID.\n");
+                        else
+                            System.out.println("\nERROR: El ID introducido no se encuentra en la lista.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+
+        Date deadlineExpected = null;
+        ready = false;
+        do {
+            System.out.println("Inserte la fecha limite para resolver el tiquete con este formato: dd/mm/yyyy. Inserte \"Cancelar\" si no desea continuar.");
+            input = scanner.next();
+            scanner.nextLine();
+            if (input.equals("Cancelar")) {
+                System.out.println("\nLa operación ha sido cancelada.\n");
+                //Exist the operation.
+                return;
+            }
+            try {
+                deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(input);
+                ready = true;
+            } catch (ParseException e) {
+                System.out.println("\nERROR: Formato incorrecto.\n"); }
+        } while (!ready);
+
+        takeTicket(ticketID, supporter, deadlineExpected);
+    }
+
+    public void commentTicket(Supporter supporter) {
+        System.out.println("Tiquetes con sus IDs.");
+        System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+
+        ready = false;
+        do {
+            try {
+                System.out.println("Inserte el ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (!ticketManager.existsID(ticketID)) {
+                        ready = true;
+                    } else {
+                        System.out.println("\nERROR: Ya existe un tiquete con este ID.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+
+        System.out.println("Tiquetes con sus IDs.");
+        System.out.println(ticketManager.consultTicketForSupporters(ticketID, supporter));
+        System.out.println("Inserte el comentario para retroalimentación. Inserte \"Cancelar\" si no desea continuar.");
+        String comment = scanner.nextLine();
+        if (comment.equals("Cancelar")) {
+            System.out.println("\nLa operación ha sido cancelada.\n");
+            //Exits the operation.
+            return;
+        }
+
+        ticketManager.addComment(ticketID, comment);
+        System.out.println("\n¡COMENTARIO AÑADIDO!\n");
+    }
+
+    public void finishTicket(Supporter supporter) {
+        System.out.println("Tiquetes con sus IDs.");
+        System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+
+        ready = false;
+        do {
+            try {
+                System.out.println("Inserte el ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (ticketManager.existsID(ticketID) && !ticketManager.getTicket(ticketID).isFinished() && ticketManager.getTicket(ticketID).wasTakenBy(supporter)) {
+                        ready = true;
+                    } else {
+                        if (!ticketManager.existsID(ticketID))
+                            System.out.println("\nERROR: No existe un tiquete con este ID.\n");
+                        else if (ticketManager.getTicket(ticketID).isFinished() || !ticketManager.getTicket(ticketID).wasTakenBy(supporter)) {
+                            System.out.println("\nERROR: Este tiquete no se encuentra en la lista.\n");
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            }
+        } while (!ready);
+
+
+        ticketManager.finishTicket(ticketID);
+        System.out.println("\n¡TIQUETE TERMINADO!\n");
+
+    }
+
+    public void visualizeTicketsOfSupporter(Supporter supporter) {
+        System.out.println("TIQUETES PENDIENTES");
+        System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+        System.out.println("TIQUETES TERMINADOS");
+        System.out.println(ticketManager.readSupporterFinishedTickets(supporter));
+        System.out.println("TIQUETES DISPONIBLES");
+        System.out.println(ticketManager.readAvailableTickets());
+    }
+
+    public void consultTicketsWithDetailSupporter(Supporter supporter) {
+        System.out.println("TIQUETES PENDIENTES");
+        System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
+        System.out.println("TIQUETES TERMINADOS");
+        System.out.println(ticketManager.readSupporterFinishedTickets(supporter));
+        System.out.println("TIQUETES DISPONIBLES");
+        System.out.println(ticketManager.readAvailableTickets());
+
+        ready = false;
+        do {
+            try {
+                System.out.println("Inserte el ID del tiquete. Inserte \"Cancelar\" si no desea continuar.");
+                input = scanner.next();
+                scanner.nextLine();
+
+                if (input.equals("Cancelar")) {
+                    System.out.println("\nLa operación ha sido cancelada.\n");
+                    //Exits the operation.
+                    return;
+                } else {
+                    ticketID = Integer.parseInt(input);
+                    if (ticketManager.existsID(ticketID) && (ticketManager.getTicket(ticketID).wasTakenBy(supporter) || ticketManager.getTicket(ticketID).isAvailable())) {
+                        System.out.println(ticketManager.consultTicketForSupporters(ticketID, supporter));
+                        ready = true;
+                    } else {
+                        System.out.println("\nERROR: No existe un tiquete con tal ID.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nERROR: El ID debe ser un número.\n");
+            } catch (NullPointerException e) {
+                System.out.println();
+            }
+        } while (!ready);
     }
 
     public void takeTicket(int ticketID, Supporter supporter, Date deadlineExpected) throws NullPointerException {

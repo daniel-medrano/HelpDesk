@@ -50,4 +50,8 @@ public class UserManager {
         return userList.getSupporterByID(supporterID);
     }
 
+    public boolean existsUser(int id) {
+        return getUser(id) != null;
+    }
+
 }
