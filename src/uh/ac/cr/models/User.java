@@ -37,6 +37,15 @@ public class User {
         return id + " - " + username + ". " + getFullName() + ".";
     }
 
+    public String getSpacing() {
+        //The number of digits that ID has is obtained.
+        int numOfDigits = String.valueOf(id).length();
+        String spacing = "   ";
+        for (int i = 0; i < numOfDigits; i++) {
+            spacing = spacing + " ";
+        }
+        return spacing;
+    }
 
     public int getId() {
         return id;

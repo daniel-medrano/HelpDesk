@@ -43,17 +43,7 @@ public class Menu {
 
                     Date date = new Date();
 
-                    System.out.println("Fecha limite para resolver el tiquete. En el formato dd/mm/yyyy.");
-                    String dateFormat = scanner.next();
-                    scanner.nextLine();
-                    Date deadlineExpected = null;
-                    try {
-                        deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(dateFormat);
-                    } catch (ParseException e) {
-                        System.out.println("ERROR: Formato incorrecto.");
-                    }
-
-                    createTicket(ticketID, problemDescription, date, deadlineExpected, user);
+                    createTicket(ticketID, problemDescription, date, user);
                     System.out.println("\n¡TIQUETE CREADO!\n");
                     break;
                 case 2:
@@ -108,14 +98,24 @@ public class Menu {
                     int supporterID = scanner.nextInt();
                     scanner.nextLine();
 
-                    Supporter supporter = (Supporter) userManager.getUser(supporterID);
+                    Supporter supporter = userManager.getSupporter(supporterID);
 
                     System.out.println("Seleccione el tiquete con su ID.");
                     System.out.println(ticketManager.readAvailableTickets());
                     int ticketID = scanner.nextInt();
                     scanner.nextLine();
 
-                    ticketManager.assignTicket(ticketID, supporter);
+                    System.out.println("Fecha limite para resolver el tiquete. En el formato dd/mm/yyyy.");
+                    String dateFormat = scanner.next();
+                    scanner.nextLine();
+                    Date deadlineExpected = null;
+                    try {
+                        deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(dateFormat);
+                    } catch (ParseException e) {
+                        System.out.println("ERROR: Formato incorrecto.");
+                    }
+
+                    ticketManager.assignTicket(ticketID, supporter, deadlineExpected);
                     System.out.println("\n¡TIQUETE ASIGNADO!\n");
                     break;
                 case 2:
@@ -147,6 +147,8 @@ public class Menu {
 
                     break;
                 case 4:
+                    System.out.println("ESTADÍSTICAS DE SOPORTISTAS");
+                    System.out.println(userManager.readSupportersWithStatistics());
                     break;
                 case 5:
                     break;
@@ -174,10 +176,20 @@ public class Menu {
                     System.out.println("Seleccione el tiquete con su ID.");
                     System.out.println(ticketManager.readAvailableTickets());
                     int ticketID;
+                    ticketID = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.println("Fecha limite para resolver el tiquete. En el formato dd/mm/yyyy.");
+                    String dateFormat = scanner.next();
+                    scanner.nextLine();
+                    Date deadlineExpected = null;
                     try {
-                        ticketID = scanner.nextInt();
-                        scanner.nextLine();
-                        takeTicket(ticketID, supporter);
+                        deadlineExpected = new SimpleDateFormat("dd/MM/yyyy").parse(dateFormat);
+                    } catch (ParseException e) {
+                        System.out.println("ERROR: Formato incorrecto.");
+                    }
+                    try {
+                        takeTicket(ticketID, supporter, deadlineExpected);
                         System.out.println("\n¡TIQUETE TOMADO!\n");
 
                     } catch (NullPointerException e) {
@@ -187,7 +199,6 @@ public class Menu {
                     }
                     break;
                 case 2:
-                    //TODO ----------------
                     System.out.println("Seleccione el tiquete con su ID.");
                     System.out.println(ticketManager.readSupporterUnfinishedTickets(supporter));
                     try {
@@ -258,11 +269,11 @@ public class Menu {
 
     }
 
-    public void createTicket(int ticketID, String problemDescription, Date date, Date deadlineExpected, User requesterOfTicket) {
-        ticketManager.createTicket(ticketID, requesterOfTicket, problemDescription, date, deadlineExpected);
+    public void createTicket(int ticketID, String problemDescription, Date date, User requesterOfTicket) {
+        ticketManager.createTicket(ticketID, requesterOfTicket, problemDescription, date);
     }
 
-    public void takeTicket(int ticketID, Supporter supporter) throws NullPointerException {
-        ticketManager.assignTicket(ticketID, supporter);
+    public void takeTicket(int ticketID, Supporter supporter, Date deadlineExpected) throws NullPointerException {
+        ticketManager.assignTicket(ticketID, supporter, deadlineExpected);
     }
 }

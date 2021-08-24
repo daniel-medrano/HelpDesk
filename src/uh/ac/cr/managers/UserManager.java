@@ -30,6 +30,10 @@ public class UserManager {
         return userList.readSupporters();
     }
 
+    public String readSupportersWithStatistics() {
+        return userList.readSupportersWithStatistics();
+    }
+
     public User getUser(int userID) {
         return userList.getUserByID(userID);
     }
@@ -42,8 +46,8 @@ public class UserManager {
         return userList.validateUser(username, password);
     }
     //TODO - Test if this works.
-    public void makeSupporter(int userID) {
-        Supporter supporter = (Supporter) getUser(userID);
+    public Supporter getSupporter(int supporterID) {
+        return userList.getSupporterByID(supporterID);
     }
 
 }

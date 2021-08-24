@@ -15,8 +15,8 @@ public class TicketManager {
         this.ticketList = new TicketList();
     }
 
-    public void createTicket(int ticketID, User requesterOfTicket, String problemDescription, Date date, Date deadlineExpected) {
-        ticketList.insertTicketToTail(new Ticket(ticketID, requesterOfTicket, problemDescription, date, deadlineExpected));
+    public void createTicket(int ticketID, User requesterOfTicket, String problemDescription, Date date) {
+        ticketList.insertTicketToTail(new Ticket(ticketID, requesterOfTicket, problemDescription, date));
     }
     public String readHangingTickets() {
         return ticketList.readHangingTickets();
@@ -66,8 +66,10 @@ public class TicketManager {
     public void addComment(int ticketID, String comment) throws NullPointerException {
         ticketList.getTicketByID(ticketID).insertComment(comment);
     }
-    public void assignTicket(int ticketID, Supporter supporter) throws NullPointerException {
-        ticketList.getTicketByID(ticketID).assignTicketToSupporter(supporter);
+    public void assignTicket(int ticketID, Supporter supporter, Date deadlineExpected) throws NullPointerException {
+        Ticket ticket = ticketList.getTicketByID(ticketID);
+        ticket.assignTicketToSupporter(supporter);
+        ticket.setDeadlineExpected(deadlineExpected);
     }
     public void finishTicket(int ticketID) throws NullPointerException {
         ticketList.getTicketByID(ticketID).finishTicket();

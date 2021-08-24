@@ -35,17 +35,34 @@ public class UserList {
     //Finds a user with its ID and returns it.
     public User getUserByID(int userID) {
         UserNode nodeIndex = head;
-        boolean found = false;
+        boolean found;
 
-        while (nodeIndex != null && !found) {
+        while (nodeIndex != null) {
             //If the userID inserted matches the ID of one of the users in the nodes, then found is true.
             found = nodeIndex.user.getId() == userID;
+            if (found) {
+                return nodeIndex.user;
+            }
             //Iterates through all the nodes
             nodeIndex = nodeIndex.next;
         }
+        return null;
+    }
 
-        if (nodeIndex != null) {
-            return nodeIndex.user;
+    public Supporter getSupporterByID(int supporterID) {
+        UserNode nodeIndex = head;
+        boolean found = false;
+
+        while (nodeIndex != null) {
+            //If the userID inserted matches the ID of one of the users in the nodes, then found is true.
+            if (nodeIndex.user instanceof Supporter) {
+                found = nodeIndex.user.getId() == supporterID;
+            }
+            if (found) {
+                return (Supporter) nodeIndex.user;
+            }
+            //Iterates through all the nodes
+            nodeIndex = nodeIndex.next;
         }
         return null;
     }
@@ -58,6 +75,20 @@ public class UserList {
             if (index.user instanceof Supporter) {
                 //TODO - Replace it for the method getTicketInfo().
                 supportersList = supportersList + index.user.getUserInfo() + "\n";
+            }
+            index = index.next;
+        }
+        return supportersList;
+    }
+
+    public String readSupportersWithStatistics() {
+        UserNode index = head;
+        String supportersList = "";
+
+        while (index != null) {
+            if (index.user instanceof Supporter) {
+                //TODO - Replace it for the method getTicketInfo().
+                supportersList = supportersList + ((Supporter) index.user).getSupporterInfo() + "\n";
             }
             index = index.next;
         }

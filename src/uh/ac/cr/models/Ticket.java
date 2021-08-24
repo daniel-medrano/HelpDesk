@@ -16,13 +16,13 @@ public class Ticket {
 
     int descriptionWidth;
 
-    public Ticket(int ticketID, User requesterOfTicket, String problemDescription, Date date, Date deadlineExpected) {
+    public Ticket(int ticketID, User requesterOfTicket, String problemDescription, Date date) {
         this.ticketID = ticketID;
         this.requesterOfTicket = requesterOfTicket;
         this.supporter = null;
         this.problemDescription = problemDescription;
         this.date = date;
-        this.deadlineExpected = deadlineExpected;
+        this.deadlineExpected = null;
         this.available = true;
         this.finished = false;
         this.comments = new ArrayList<>();
@@ -182,6 +182,12 @@ public class Ticket {
     }
 
     public void finishTicket() {
+        if (date.after(deadlineExpected)) {
+            supporter.increaseTicketsFinishedOverdue();
+        } else {
+            supporter.increaseTicketsFinishedOnTime();
+        }
+        supporter.increaseTicketsFinished();
         setFinished(true);
         setAvailable(false);
     }
