@@ -9,8 +9,4 @@ public class Supervisor extends User {
     public void assignTicket() {
 
     }
-
-    public void getMenu() {
-
-    }
 }

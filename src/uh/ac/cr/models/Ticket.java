@@ -44,6 +44,18 @@ public class Ticket {
         this.available = false;
     }
 
+    public String getTicketInfo() {
+        return null;
+    }
+
+    public boolean isFromUser(User user) {
+        return requesterOfTicket == user;
+    }
+
+    public boolean wasTakenBy(Supporter supporter) {
+        return this.supporter == supporter;
+    }
+
     public String getProblemDescription() {
         return problemDescription;
     }
@@ -78,6 +90,7 @@ public class Ticket {
 
     public void finishTicket() {
         setFinished(true);
+        setAvailable(false);
     }
 
     public boolean isFinished() {

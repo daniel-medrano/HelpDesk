@@ -1,6 +1,8 @@
 package uh.ac.cr.dataStructures;
 
+import uh.ac.cr.models.Supporter;
 import uh.ac.cr.models.Ticket;
+import uh.ac.cr.models.User;
 
 public class TicketList {
     TicketNode head;
@@ -34,15 +36,15 @@ public class TicketList {
         TicketNode nodeIndex = head;
         boolean found = false;
 
-        while (nodeIndex != null && !found) {
+        while (nodeIndex != null) {
             //If the ticketID inserted matches the ticketID of one of the tickets in the nodes, then found is true.
             found = nodeIndex.ticket.getTicketID() == ticketID;
+
+            if (found) {
+                return nodeIndex.ticket;
+            }
             //Iterates through all the nodes
             nodeIndex = nodeIndex.next;
-        }
-
-        if (nodeIndex != null) {
-            return nodeIndex.ticket;
         }
         return null;
     }
@@ -73,6 +75,76 @@ public class TicketList {
             size--;
         }
     }
+
+    public String readFinishedTickets() {
+        TicketNode index = head;
+        String finishedTickets = "";
+
+        while (index != null) {
+            if (index.ticket.isFinished()) {
+                finishedTickets = finishedTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername();
+            }
+            index = index.next;
+        }
+        return finishedTickets;
+    }
+
+    public String readAvailableTickets() {
+        TicketNode index = head;
+        String availableTickets = "";
+
+        while (index != null) {
+            if (index.ticket.isAvailable()) {
+                availableTickets = availableTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+            }
+            index = index.next;
+        }
+        return availableTickets;
+    }
+
+    public String readUserUnfinishedTickets(User user) {
+        TicketNode index = head;
+        String activeTickets = "";
+
+        while (index != null) {
+            if (index.ticket.isFromUser(user) && !index.ticket.isFinished()) {
+                //TODO - Replace it for the method getTicketInfo().
+                activeTickets = activeTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+            }
+            index = index.next;
+        }
+        return activeTickets;
+    }
+
+    public String readUserFinishedTickets(User user) {
+        TicketNode index = head;
+        String finishedTickets = "";
+
+        while (index != null) {
+            if (index.ticket.isFromUser(user) && index.ticket.isFinished()) {
+                //TODO - Replace it for the method getTicketInfo().
+                finishedTickets = finishedTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+            }
+            index = index.next;
+        }
+        return finishedTickets;
+    }
+
+    public String readSupporterUnfinishedTickets(Supporter supporter) {
+        TicketNode index = head;
+        String activeTickets = "";
+
+        while (index != null) {
+            if (index.ticket.wasTakenBy(supporter) && !index.ticket.isFinished()) {
+                //TODO - Replace it for the method getTicketInfo().
+                activeTickets = activeTickets + index.ticket.getTicketID() + " - " + index.ticket.getRequesterOfTicket().getUsername() + "\n";
+            }
+            index = index.next;
+        }
+        return activeTickets;
+    }
+
+
 
     private boolean isTicketListEmpty() {
         return size == 0 || head == null;

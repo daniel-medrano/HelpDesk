@@ -26,8 +26,8 @@ public class UserManager {
         userList.insertUserToTail(new Supporter(supporterID, username, password));
     }
 
-    public void getUser() {
-
+    public User getUser(int userID) {
+        return userList.getUserByID(userID);
     }
 
     public void deleteUser() {
@@ -36,6 +36,10 @@ public class UserManager {
 
     public User validateUser(String username, String password) {
         return userList.validateUser(username, password);
+    }
+    //TODO - Test if this works.
+    public void makeSupporter(int userID) {
+        Supporter supporter = (Supporter) getUser(userID);
     }
 
 }
