@@ -411,10 +411,10 @@ public class Menu {
                     return;
                 } else {
                     ticketID = Integer.parseInt(input);
-                    if (!ticketManager.existsID(ticketID)) {
+                    if (ticketManager.existsID(ticketID) && ticketManager.getTicket(ticketID).wasTakenBy(supporter) && !ticketManager.getTicket(ticketID).isFinished()) {
                         ready = true;
                     } else {
-                        System.out.println("\nERROR: Ya existe un tiquete con este ID.\n");
+                        System.out.println("\nERROR: No existe un tiquete con este ID.\n");
                     }
                 }
             } catch (NumberFormatException e) {

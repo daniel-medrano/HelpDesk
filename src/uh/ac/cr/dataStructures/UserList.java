@@ -73,7 +73,6 @@ public class UserList {
 
         while (index != null) {
             if (index.user instanceof Supporter) {
-                //TODO - Replace it for the method getTicketInfo().
                 supportersList = supportersList + index.user.getUserInfo() + "\n";
             }
             index = index.next;
@@ -87,7 +86,6 @@ public class UserList {
 
         while (index != null) {
             if (index.user instanceof Supporter) {
-                //TODO - Replace it for the method getTicketInfo().
                 supportersList = supportersList + ((Supporter) index.user).getSupporterInfo() + "\n";
             }
             index = index.next;

@@ -121,7 +121,6 @@ public class TicketList {
 
         while (index != null) {
             if (index.ticket.isFromUser(user) && !index.ticket.isFinished()) {
-                //TODO - Replace it for the method getTicketInfo().
                 activeTickets = activeTickets + index.ticket.getTicketInfoForUser() + "\n";
             }
             index = index.next;
@@ -135,7 +134,6 @@ public class TicketList {
 
         while (index != null) {
             if (index.ticket.isFromUser(user) && index.ticket.isFinished()) {
-                //TODO - Replace it for the method getTicketInfo().
                 finishedTickets = finishedTickets + index.ticket.getTicketInfoForUser() + "\n";
             }
             index = index.next;
@@ -149,7 +147,6 @@ public class TicketList {
 
         while (index != null) {
             if (index.ticket.wasTakenBy(supporter) && !index.ticket.isFinished()) {
-                //TODO - Replace it for the method getTicketInfo().
                 activeTickets = activeTickets + index.ticket.getTicketInfoForSupporter() + "\n";
             }
             index = index.next;
@@ -162,7 +159,6 @@ public class TicketList {
 
         while (index != null) {
             if (index.ticket.wasTakenBy(supporter) && index.ticket.isFinished()) {
-                //TODO - Replace it for the method getTicketInfo().
                 finishedTickets = finishedTickets + index.ticket.getTicketInfoForSupporter() + "\n";
             }
             index = index.next;

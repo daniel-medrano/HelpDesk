@@ -14,14 +14,15 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
 
+        //Student: José Daniel Medrano Guadamuz
 
         UserManager userManager = new UserManager();
         TicketManager ticketManager = new TicketManager();
 
 
         userManager.createUser(1,"Daniel", "Medrano", "IT", "Daniel123", "1234");
-        userManager.createSupporter(2,"Jose", "Medrano", "IT", "Gordo", "1234");
-        userManager.createSupervisor(3,"Erick", "Lopez", "IT", "Profe", "1234");
+        userManager.createSupporter(2,"Ximena", "Solano", "IT", "Xime123", "1234");
+        userManager.createSupervisor(3,"Juanito", "Mora", "IT", "Mora123", "1234");
 
         Menu menu = new Menu(userManager, ticketManager);
 

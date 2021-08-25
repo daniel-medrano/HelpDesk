@@ -2,6 +2,7 @@ package uh.ac.cr.models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Stack;
 
 public class Ticket {
     int ticketID;
@@ -12,7 +13,7 @@ public class Ticket {
     Date deadlineExpected;
     boolean available;
     boolean finished;
-    ArrayList<String> comments;
+    Stack<String> comments;
 
     int descriptionWidth;
 
@@ -25,7 +26,8 @@ public class Ticket {
         this.deadlineExpected = null;
         this.available = true;
         this.finished = false;
-        this.comments = new ArrayList<>();
+        //STACK DATA STRUCTURE <<-----------------------------------------------------------------------------
+        this.comments = new Stack<>();
 
         this.descriptionWidth = 25;
     }
@@ -103,13 +105,27 @@ public class Ticket {
     }
 
     public void insertComment(String comment) {
-        this.comments.add(comment);
+        this.comments.push(comment);
     }
-
+    /*
     public String getComments() {
         String comments = "";
         for (String comment : this.comments) {
             comments = comments + getTextBox(comment, descriptionWidth) + "\n";
+        }
+        return comments;
+    }
+     */
+
+    public String getComments() {
+        Stack<String> aux = new Stack<>();
+        String comments = "";
+        for (int i = this.comments.size(); i > 0; i--) {
+            comments = comments + getTextBox(this.comments.peek(), descriptionWidth) + "\n\n";
+            aux.push(this.comments.pop());
+        }
+        for (int i = aux.size(); i > 0; i--) {
+            this.comments.push(aux.pop());
         }
         return comments;
     }
